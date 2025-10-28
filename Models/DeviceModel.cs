@@ -18,7 +18,7 @@ namespace IoTDeviceManager.Models
         public bool IsOnline { get => _isOnline; set { _isOnline = value; OnPropertyChanged(); } }
         public DateTime LastUpdated { get => _lastUpdated; set { _lastUpdated = value; OnPropertyChanged(); } }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string? prop = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
