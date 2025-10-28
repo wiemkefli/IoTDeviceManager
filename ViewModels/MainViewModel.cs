@@ -9,6 +9,8 @@ using System.Windows;
 
 namespace IoTDeviceManager.ViewModels
 {
+#nullable enable
+
     public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         public ObservableCollection<DeviceModel> Devices { get; } = new();

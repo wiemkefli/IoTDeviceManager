@@ -4,6 +4,8 @@ using System.Runtime.CompilerServices;
 
 namespace IoTDeviceManager.Models
 {
+#nullable enable
+
     public class DeviceModel : INotifyPropertyChanged
     {
         private int _id;

@@ -3,6 +3,8 @@ using System.Windows.Input;
 
 namespace IoTDeviceManager.ViewModels
 {
+#nullable enable
+
     public class RelayCommand : ICommand
     {
         private readonly Action<object?> _execute;

@@ -5,6 +5,8 @@ using IoTDeviceManager.Models;
 
 namespace IoTDeviceManager.Services
 {
+#nullable enable
+
     public class DeviceTelemetryEventArgs : EventArgs
     {
         public DeviceModel Device { get; set; }
