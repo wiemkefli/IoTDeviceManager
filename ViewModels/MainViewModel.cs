@@ -40,13 +40,34 @@ namespace IoTDeviceManager.ViewModels
             Devices.Add(new DeviceModel { Id = 3, Name = "Cam-02", Type = "Camera", IsOnline = true });
 
             _sim = new DeviceSimulator(Devices);
-            _sim.Telemetry += (s, e) =>
-                App.Current.Dispatcher.Invoke(() =>
-                    Logs.Add(new LogEntry { Action = "Telemetry", Details = $"{e.Device.Name}: temp={e.Temperature}°C" }));
 
-            _sim.Disconnected += (s, d) =>
+            _sim.TelemetryReceived += (s, e) =>
                 App.Current.Dispatcher.Invoke(() =>
-                    Logs.Add(new LogEntry { Action = "Disconnected", Details = $"{d.Name} went offline" }));
+                    Logs.Add(new LogEntry
+                    {
+                        Action = "Telemetry",
+                        Details = $"{e.Device.Name}: Temp={e.Temperature}°C, Humidity={e.Humidity}%"
+                    })
+                );
+
+            _sim.DeviceDisconnected += (s, d) =>
+                App.Current.Dispatcher.Invoke(() =>
+                    Logs.Add(new LogEntry
+                    {
+                        Action = "Disconnected",
+                        Details = $"{d.Name} lost connection (offline)"
+                    })
+                );
+
+            _sim.ErrorOccurred += (s, msg) =>
+                App.Current.Dispatcher.Invoke(() =>
+                    Logs.Add(new LogEntry
+                    {
+                        Action = "Error",
+                        Details = msg
+                    })
+                );
+
 
             AddCommand = new RelayCommand(_ => Add());
             UpdateCommand = new RelayCommand(_ => Update(), _ => SelectedDevice != null);

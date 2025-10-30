@@ -9,20 +9,27 @@ namespace IoTDeviceManager.Services
 
     public class DeviceTelemetryEventArgs : EventArgs
     {
-        public DeviceModel Device { get; set; }
-        public double Temperature { get; set; }
-        public DeviceTelemetryEventArgs(DeviceModel device, double temp)
-        { Device = device; Temperature = temp; }
+        public DeviceModel Device { get; }
+        public double Temperature { get; }
+        public double Humidity { get; }
+
+        public DeviceTelemetryEventArgs(DeviceModel device, double temp, double humidity)
+        {
+            Device = device;
+            Temperature = temp;
+            Humidity = humidity;
+        }
     }
 
     public class DeviceSimulator : IDisposable
     {
         private readonly Timer _timer;
-        private readonly Random _rand = new Random();
+        private readonly Random _rand = new();
         private readonly IList<DeviceModel> _devices;
 
-        public event EventHandler<DeviceTelemetryEventArgs>? Telemetry;
-        public event EventHandler<DeviceModel>? Disconnected;
+        public event EventHandler<DeviceTelemetryEventArgs>? TelemetryReceived;
+        public event EventHandler<DeviceModel>? DeviceDisconnected;
+        public event EventHandler<string>? ErrorOccurred;
 
         public DeviceSimulator(IList<DeviceModel> devices, double intervalMs = 2000)
         {
@@ -34,26 +41,36 @@ namespace IoTDeviceManager.Services
         public void Start() => _timer.Start();
         public void Stop() => _timer.Stop();
 
-        private void Tick(object? s, ElapsedEventArgs e)
+        private void Tick(object? sender, ElapsedEventArgs e)
         {
             foreach (var d in _devices)
             {
-                // 15% chance to flip connectivity
-                if (_rand.NextDouble() < 0.15) d.IsOnline = !d.IsOnline;
+                try
+                {
+                    // 10% chance to simulate network drop
+                    if (_rand.NextDouble() < 0.10)
+                    {
+                        d.IsOnline = false;
+                        DeviceDisconnected?.Invoke(this, d);
+                        continue;
+                    }
 
-                if (d.IsOnline)
-                {
-                    d.LastUpdated = DateTime.Now;
-                    var temp = Math.Round(20 + _rand.NextDouble() * 10, 2);
-                    Telemetry?.Invoke(this, new DeviceTelemetryEventArgs(d, temp));
+                    if (d.IsOnline)
+                    {
+                        d.LastUpdated = DateTime.Now;
+                        double temp = Math.Round(20 + _rand.NextDouble() * 10, 2);
+                        double hum = Math.Round(40 + _rand.NextDouble() * 20, 2);
+
+                        TelemetryReceived?.Invoke(this, new DeviceTelemetryEventArgs(d, temp, hum));
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Disconnected?.Invoke(this, d);
+                    ErrorOccurred?.Invoke(this, $"Error communicating with {d.Name}: {ex.Message}");
                 }
             }
         }
 
-        public void Dispose() => _timer?.Dispose();
+        public void Dispose() => _timer.Dispose();
     }
 }
