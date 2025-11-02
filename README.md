@@ -1,8 +1,31 @@
-# IoTDeviceManager
+# 🛰️ IoTDeviceManager – Desktop IoT Simulation App
 
-# IoT Device Manager – SMSC Software Engineer (IoT) Assessment
-**Author:** Muhammad Qawiem Bin Zulkefli  
-**Date:** October 2025  
+## 🧭 Overview
+**IoTDeviceManager** is a WPF desktop application developed in **C# (.NET Framework)** that simulates communication between multiple IoT devices and a central management system.  
+It allows users to **add, update, delete, toggle device status**, and **view real-time telemetry logs** such as temperature, humidity, and connection events.  
+
+This project demonstrates practical knowledge of **event-driven programming**, **MVVM architecture**, and **simulated IoT device communication**.
+
+---
+
+## ⚙️ a) Setup / Build Instructions
+
+### **Requirements**
+| Component | Version / Notes |
+|------------|-----------------|
+| **IDE** | Visual Studio 2022 or newer |
+| **.NET Framework** | 4.8 (WPF Desktop App) |
+| **Language** | C# |
+| **Platform** | Windows OS |
+| **Optional Tools** | Git, draw.io (for diagrams) |
+
+---
+
+### **Steps to Build and Run**
+1. **Clone or extract** the project folder:
+   ```bash
+   git clone https://github.com/yourusername/IoTDeviceManager.git
+ 
 
 ## Overview
 This project is a WPF desktop application developed in C# (.NET Framework 4.8) that simulates IoT device management.  
