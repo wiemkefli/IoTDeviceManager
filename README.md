@@ -33,7 +33,7 @@ This project demonstrates practical knowledge of **event-driven programming**, *
 ### **Steps to Build and Run**
 1. **Clone or extract** the project folder:
    ```bash
-   git clone https://github.com/yourusername/IoTDeviceManager.git
+   git clone https://github.com/wiemkefli/IoTDeviceManager.git
 
 Or open the provided ZIP folder in Visual Studio.
 
